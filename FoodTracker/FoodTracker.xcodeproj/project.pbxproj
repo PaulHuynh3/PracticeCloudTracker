@@ -17,6 +17,7 @@
 		889309521F89B0FA00761747 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 889309501F89B0FA00761747 /* LaunchScreen.storyboard */; };
 		8893095D1F89B0FA00761747 /* FoodTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8893095C1F89B0FA00761747 /* FoodTrackerTests.swift */; };
 		889309681F8ABBC500761747 /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889309671F8ABBC500761747 /* RatingControl.swift */; };
+		DAD355381FC731DD002D9F47 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD355371FC731DD002D9F47 /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		8893095C1F89B0FA00761747 /* FoodTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodTrackerTests.swift; sourceTree = "<group>"; };
 		8893095E1F89B0FA00761747 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		889309671F8ABBC500761747 /* RatingControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
+		DAD355371FC731DD002D9F47 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 			children = (
 				889309671F8ABBC500761747 /* RatingControl.swift */,
 				881BEA9B1F8AD3CE001DD444 /* Meal.swift */,
+				DAD355371FC731DD002D9F47 /* NetworkManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				881BEA9C1F8AD3CE001DD444 /* Meal.swift in Sources */,
 				8893094A1F89B0FA00761747 /* MealViewController.swift in Sources */,
 				889309681F8ABBC500761747 /* RatingControl.swift in Sources */,
+				DAD355381FC731DD002D9F47 /* NetworkManager.swift in Sources */,
 				889309481F89B0FA00761747 /* AppDelegate.swift in Sources */,
 				881BEAA01F8ADB78001DD444 /* MealTableViewController.swift in Sources */,
 				881BEA9E1F8AD7AB001DD444 /* MealTableViewCell.swift in Sources */,
