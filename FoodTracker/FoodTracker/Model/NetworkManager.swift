@@ -183,5 +183,29 @@ class NetworkManager: NSObject {
         
     }
     
+    class func loadImage(imageURL: URL, completionHandler: @escaping (UIImage) -> Void) {
+        
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        
+        let request = URLRequest(url: imageURL)
+        
+        let task = session.dataTask(with: request) { (data, response, error) in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            if let image = UIImage(data: data){
+                completionHandler(image)
+            }
+            
+        }
+        task.resume()
+    }
+    
     
 }
