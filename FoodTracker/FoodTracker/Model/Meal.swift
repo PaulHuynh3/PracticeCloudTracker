@@ -19,6 +19,7 @@ class Meal {
     var info: Dictionary<String,Any>?
     var mealDescription: String?
     var calories: Int?
+    var mealID: Int?
     
     //MARK: initialize with json data
     
@@ -41,6 +42,10 @@ class Meal {
 
         if let calories = info["calories"] as? Int {
             self.calories = calories
+        }
+        
+        if let mealID = info["id"] as? Int {
+            self.mealID = mealID
         }
 
     }

@@ -29,12 +29,12 @@ class NetworkManager: NSObject {
         
         
         let task = session.dataTask(with: request) { (data:Data?, response:URLResponse?, error:Error?) in
-         
+            
             if let error = error {
                 print(#line,error.localizedDescription)
                 return
             }
-      
+            
             guard(response as! HTTPURLResponse).statusCode < 300 else {
                 return
             }
@@ -44,21 +44,21 @@ class NetworkManager: NSObject {
             }
             
             do{
-            
-                guard let result = try JSONSerialization.jsonObject(with: data) as? Dictionary<String,Dictionary<String,Any>> else{
-                 return
-                }
-             //create meal
-             let createMeal = Meal(info: result["meal"]!)
                 
-            //save it to completion handler.
-            completionHandler(createMeal)
+                guard let result = try JSONSerialization.jsonObject(with: data) as? Dictionary<String,Dictionary<String,Any>> else{
+                    return
+                }
+                //create meal
+                let createMeal = Meal(info: result["meal"]!)
+                
+                //save it to completion handler.
+                completionHandler(createMeal)
                 
             }
             catch{
                 print(#line,error.localizedDescription)
             }
-                
+            
         }
         task.resume()
         
@@ -108,23 +108,80 @@ class NetworkManager: NSObject {
                 return
             }
             
-
             
-           guard
-            let dataDict = dict["data"] as? Dictionary<String,Any>,
-            //access the "link" string in data
-            let linkString = dataDict["link"] as? String,
-            let link = URL(string:linkString)
-            else{
-                print(#line, "no link from response")
-                return
+            guard
+                let dataDict = dict["data"] as? Dictionary<String,Any>,
+                //access the "link" string in data
+                let linkString = dataDict["link"] as? String,
+                let link = URL(string:linkString)
+                else{
+                    print(#line, "no link from response")
+                    return
             }
+            
+            //after we post photo imgur they return as a link to the image.
             completionHandler(link)
- 
+            
+            
             
         }
         task.resume()
     }
     
-
+    class func updateMealWithPhoto(meal: Meal, photoURL: URL, completionHandler: @escaping () -> Void) {
+        
+        let sessionConfig = URLSessionConfiguration.default
+        
+        let session = URLSession(configuration: sessionConfig)
+        
+        guard let components = URLComponents(string: "https://cloud-tracker.herokuapp.com/users/me/meals/\(meal.mealID)/photo?photo=\(photoURL)") else {
+            return
+        }
+        
+        var request = URLRequest(url: components.url!)
+        
+        request.httpMethod = "POST"
+        request.addValue("m7Ba2XzfmjabdcBCPxq9sQvo", forHTTPHeaderField: "token")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        
+        let task = session.dataTask(with: request) { (data, response, error) in
+            
+            if let error = error {
+                print(#line, error.localizedDescription)
+                return
+            }
+            
+            guard(response as! HTTPURLResponse).statusCode >= 300 else{
+                print("error in response", response!)
+                return
+            }
+            
+            guard let data = data else {return}
+            
+            do{
+                guard let dict = try JSONSerialization.jsonObject(with: data) as? Dictionary<String,Dictionary<String,Any>>else{
+                    return
+                }
+                
+                let urlStr = dict["meal"]!["imagePath"] as! String
+                
+                //assign the meal.photourl property to the image's url
+                meal.photoURL = URL(string:urlStr)
+                
+                completionHandler()
+            }
+            
+            catch {
+                print(#line,error.localizedDescription)
+            }
+            
+            
+        }
+        task.resume()
+        session.finishTasksAndInvalidate()
+        
+    }
+    
+    
 }
