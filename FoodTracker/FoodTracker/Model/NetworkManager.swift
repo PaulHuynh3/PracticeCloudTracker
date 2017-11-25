@@ -207,5 +207,49 @@ class NetworkManager: NSObject {
         task.resume()
     }
     
+    class func sendGetRequestForAllMeals(completionHandler: @escaping ([Meal]) -> Void) {
+        
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        
+        guard let component = URLComponents(string: "https://cloud-tracker.herokuapp.com/users/me/meals") else {
+            print("Something is wrong with the url")
+            return
+        }
+        
+        var request = URLRequest(url: component.url!)
+        
+        request.httpMethod = "GET"
+        request.addValue("token", forHTTPHeaderField: "m7Ba2XzfmjabdcBCPxq9sQvo")
+        
+        
+        let downloadTask = session.dataTask(with: request) { (data, response, error) in
+            
+            if let error = error {
+                return
+            }
+            
+            guard let data = data else {
+                return
+            }
+            var meals = [Meal]()
+            do {
+            let dict = try JSONSerialization.jsonObject(with: data) as? Array<Dictionary<String,Any>>
+                
+                for meal in dict! {
+                    
+                }
+                
+            }
+            
+            catch{
+                
+                
+            }
+            
+        }
+    }
+    
+    
     
 }
