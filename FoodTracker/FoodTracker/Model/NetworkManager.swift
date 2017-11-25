@@ -171,7 +171,7 @@ class NetworkManager: NSObject {
                 
                 completionHandler()
             }
-            
+                
             catch {
                 print(#line,error.localizedDescription)
             }
@@ -234,22 +234,27 @@ class NetworkManager: NSObject {
             }
             var meals = [Meal]()
             do {
-            let dict = try JSONSerialization.jsonObject(with: data) as? Array<Dictionary<String,Any>>
-                
-                for meal in dict! {
+                if let dict = try JSONSerialization.jsonObject(with: data) as? Array<Dictionary<String,Any>> {
+                    
+                    for item in dict {
+                        meals.append(Meal(info: item))
+                    }
                     
                 }
-                
             }
-            
+                
             catch{
                 
-                
+                print(#line, error.localizedDescription)
             }
             
+        completionHandler(meals)
+            
         }
+        downloadTask.resume()
+        session.finishTasksAndInvalidate()
     }
     
-    
+    class func getRequestMealID(mealID:Int, completionHandler: @escaping (Meal) -> Void)
     
 }
