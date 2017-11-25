@@ -24,7 +24,6 @@ class MealTableViewController: UITableViewController
         navigationItem.leftBarButtonItem = editButtonItem
         
         
-        
     }
     
     
@@ -121,12 +120,15 @@ class MealTableViewController: UITableViewController
             }
             else {
                 
-                // Add a new meal.
-                let newIndexPath = IndexPath(row: meals.count, section: 0)
-                
-                meals.append(meal)
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
+                NetworkManager.sendGetRequestForAllMeals { (meal:[Meal]) in
+                    OperationQueue.main.addOperation({
+                        self.meals = meal
+                        self.tableView.reloadData()
+                    })
+                }
             }
+            
+            
          
             
         }
