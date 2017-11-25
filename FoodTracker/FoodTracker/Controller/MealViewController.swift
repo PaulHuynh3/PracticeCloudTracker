@@ -117,7 +117,21 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
             os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
             return
         }
-    
+        NetworkManager.createMeal(title: self.nameTextField.text!, description: "just a test", calories: 5) { (meal:Meal?) in
+                        
+            NetworkManager.postPhotoToImgur(image: self.photoImageView.image!, completionHandler: { (urlLink:URL?) in
+                
+                NetworkManager.updateMealWithPhoto(meal: meal!, photoURL: urlLink!, completionHandler: {
+                    
+                    OperationQueue.main.addOperation({
+                        self.meal = meal
+                    })
+                    
+                })
+                
+            })
+            
+        }
         
     }
     
