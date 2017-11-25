@@ -255,6 +255,51 @@ class NetworkManager: NSObject {
         session.finishTasksAndInvalidate()
     }
     
-    class func getRequestMealID(mealID:Int, completionHandler: @escaping (Meal) -> Void)
+    class func getRequestMealID(mealID:Int, completionHandler: @escaping (Meal) -> Void) {
+        
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        
+        guard let components = URLComponents(string: "https://cloud-tracker.herokuapp.com/users/me/meals/\(mealID)") else {
+            return
+        }
+        
+        var request = URLRequest(url: components.url!)
+        request.httpMethod = "GET"
+        request.addValue("NDBJdAbPo9QrhhcxqoQk5G3P", forHTTPHeaderField: "token")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        
+        let downloadTask = session.dataTask(with: request) { (data, response, error) in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let data = data else{
+                return
+            }
+            
+        
+            do {
+                if let dict = try JSONSerialization.jsonObject(with: data) as? Dictionary<String,Dictionary<String,Any>> {
+                    
+                    let meal = Meal(info: dict)
+                    
+                    completionHandler(meal)
+                }
+            }
+            
+            catch{
+                print(#line, error.localizedDescription)
+            }
+            
+            
+        }
+        downloadTask.resume()
+        session.finishTasksAndInvalidate()
+        
+    }
     
 }
