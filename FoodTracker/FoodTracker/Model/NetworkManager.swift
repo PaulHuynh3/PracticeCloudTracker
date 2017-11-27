@@ -130,6 +130,13 @@ class NetworkManager: NSObject {
     
     class func updateMealWithPhoto(meal: Meal, photoURL: URL, completionHandler: @escaping () -> Void) {
         
+        
+        //Plan A
+        //always have to save it in a property else after this func loads the contents inside disappears when the function ends.
+        meal.photoURL = photoURL;
+        //sets the photoImage property equal to the contents of the url
+        meal.photo = try! UIImage(data: Data(contentsOf: photoURL))
+        
         let sessionConfig = URLSessionConfiguration.default
         
         let session = URLSession(configuration: sessionConfig)
