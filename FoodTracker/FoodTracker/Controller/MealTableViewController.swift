@@ -22,7 +22,13 @@ class MealTableViewController: UITableViewController
         
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
-        
+        NetworkManager.sendGetRequestForAllMeals { (meal:[Meal]) in
+            
+            OperationQueue.main.addOperation({
+                self.meals = meal
+                self.tableView.reloadData()
+            })
+        }
         
     }
     
@@ -120,12 +126,9 @@ class MealTableViewController: UITableViewController
             }
             else {
                 
-                NetworkManager.sendGetRequestForAllMeals { (meal:[Meal]) in
-                    OperationQueue.main.addOperation({
-                        self.meals = meal
-                        self.tableView.reloadData()
-                    })
-                }
+                NetworkManager.
+                
+        
             }
             
             
