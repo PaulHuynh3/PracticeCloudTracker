@@ -60,6 +60,22 @@ class MealTableViewController: UITableViewController
         // Fetches the appropriate meal for the data source layout.
         let meal = meals[indexPath.row]
         cell.nameLabel.text = meal.name
+        cell.photoImageView.image = meal.photo
+        
+        if meal.photo == nil {
+            NetworkManager.loadImage(imageURL: meal.photoURL!, completionHandler: { (image:UIImage) in
+                //assign the image returned from the url to meal.photo
+                meal.photo = image
+        
+                OperationQueue.main.addOperation({
+                    cell.nameLabel.text = meal.name
+                    cell.photoImageView.image = meal.photo
+                    self.tableView.reloadData()
+                })
+            })
+            
+        }
+        
         
         
         return cell
@@ -125,8 +141,30 @@ class MealTableViewController: UITableViewController
                 tableView.reloadRows(at: [selectedIndexPath], with: .none)
             }
             else {
+                // Add a new meal.
+                let newIndexPath = IndexPath(row: meals.count, section: 0)
                 
-                NetworkManager.
+                NetworkManager.createMeal(title: sourceViewController.nameTextField.text!, description: "just a test", calories: 3, completionHandler: { (meal:Meal) in
+                    
+                    NetworkManager.postPhotoToImgur(image: sourceViewController.photoImageView.image!, completionHandler: { (urlLink:URL) in
+                        
+                        NetworkManager.updateMealWithPhoto(meal: meal, photoURL: urlLink, completionHandler: {
+                            
+                            OperationQueue.main.addOperation({
+                                meal.photoURL = urlLink
+                                sourceViewController.meal = meal
+                                self.meals.append(meal)
+                                self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+                                self.tableView.reloadData()
+                                
+                            })
+                            
+                        })
+                        
+                    })
+                    
+                    
+                })
                 
         
             }

@@ -16,6 +16,7 @@ class Meal {
 //    var photo: UIImage?
     var photoURL: URL?
 //    var rating: Int
+    var photo:UIImage?
     var info: Dictionary<String,Any>?
     var mealDescription: String?
     var calories: Int?
